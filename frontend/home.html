@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSR Cinemas - Book Your Movie Experience</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="logo">KSR CINEMAS</h1>
+                <ul class="nav-menu">
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="movies.html">Movies</a></li>
+                    <li><a href="#" id="logoutBtn">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to KSR Cinemas</h1>
+                <p>Experience the magic of movies with premium comfort and state-of-the-art technology</p>
+                <div class="hero-buttons">
+                    <a href="movies.html" class="btn btn-primary">Book Now</a>
+                    <a href="#about" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container">
+                <h2>Why Choose KSR Cinemas?</h2>
+                <div class="features">
+                    <div class="feature">
+                        <h3>Premium Experience</h3>
+                        <p>Enjoy movies in our comfortable recliner seats with crystal clear sound and picture quality.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Latest Movies</h3>
+                        <p>Watch the latest blockbusters and exclusive premieres before anyone else.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Easy Booking</h3>
+                        <p>Book your tickets online with our simple and secure booking system.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="now-showing">
+            <div class="container">
+                <h2>Now Showing</h2>
+                <div class="movies-grid" id="movies-grid">
+                    <!-- Movies will be loaded here from API -->
+                    <div class="loading-message">Loading movies...</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-booking">
+            <div class="container">
+                <h2>Quick Booking</h2>
+                <p>Ready to watch a movie? Choose your preferred showtime and book your seats now!</p>
+                <a href="movies.html" class="btn btn-primary">View All Movies</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 KSR Cinemas. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

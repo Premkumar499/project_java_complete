@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Seats - KSR Cinemas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="logo">KSR CINEMAS</h1>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="movies.html">Movies</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="signup.html">Sign Up</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main style="padding: 2rem 0; min-height: 70vh;">
+        <div class="container">
+            <h1 style="text-align: center; margin-bottom: 2rem; color: #1a1a2e;">Select Your Seats</h1>
+            
+            <div class="seats-container">
+                <div class="screen">SCREEN</div>
+                
+                <!-- Seat Legend -->
+                <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="seat available" style="width: 20px; height: 20px;"></div>
+                        <span>Available</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="seat selected" style="width: 20px; height: 20px;"></div>
+                        <span>Selected</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="seat occupied" style="width: 20px; height: 20px;"></div>
+                        <span>Occupied</span>
+                    </div>
+                </div>
+                
+                <!-- Seats Grid -->
+                <div class="seats-grid">
+                    <!-- Row A -->
+                    <div class="seat available">A1</div>
+                    <div class="seat available">A2</div>
+                    <div class="seat occupied">A3</div>
+                    <div class="seat occupied">A4</div>
+                    <div class="seat available">A5</div>
+                    <div class="seat available">A6</div>
+                    <div class="seat available">A7</div>
+                    <div class="seat available">A8</div>
+                    <div class="seat available">A9</div>
+                    <div class="seat available">A10</div>
+                    
+                    <!-- Row B -->
+                    <div class="seat available">B1</div>
+                    <div class="seat available">B2</div>
+                    <div class="seat available">B3</div>
+                    <div class="seat available">B4</div>
+                    <div class="seat available">B5</div>
+                    <div class="seat available">B6</div>
+                    <div class="seat occupied">B7</div>
+                    <div class="seat occupied">B8</div>
+                    <div class="seat available">B9</div>
+                    <div class="seat available">B10</div>
+                    
+                    <!-- Row C -->
+                    <div class="seat available">C1</div>
+                    <div class="seat available">C2</div>
+                    <div class="seat available">C3</div>
+                    <div class="seat available">C4</div>
+                    <div class="seat available">C5</div>
+                    <div class="seat available">C6</div>
+                    <div class="seat available">C7</div>
+                    <div class="seat available">C8</div>
+                    <div class="seat available">C9</div>
+                    <div class="seat available">C10</div>
+                    
+                    <!-- Row D -->
+                    <div class="seat available">D1</div>
+                    <div class="seat available">D2</div>
+                    <div class="seat available">D3</div>
+                    <div class="seat available">D4</div>
+                    <div class="seat occupied">D5</div>
+                    <div class="seat occupied">D6</div>
+                    <div class="seat available">D7</div>
+                    <div class="seat available">D8</div>
+                    <div class="seat available">D9</div>
+                    <div class="seat available">D10</div>
+                    
+                    <!-- Row E -->
+                    <div class="seat available">E1</div>
+                    <div class="seat available">E2</div>
+                    <div class="seat available">E3</div>
+                    <div class="seat available">E4</div>
+                    <div class="seat available">E5</div>
+                    <div class="seat available">E6</div>
+                    <div class="seat available">E7</div>
+                    <div class="seat available">E8</div>
+                    <div class="seat available">E9</div>
+                    <div class="seat available">E10</div>
+                </div>
+                
+                <!-- Booking Summary -->
+                <div class="booking-info" style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 2rem;">
+                    <h3>Booking Summary</h3>
+                    <p>Selected Seats: None</p>
+                    <p>Number of Seats: 0</p>
+                    <p>Price per Seat: ₹150</p>
+                    <p><strong>Total Price: ₹0</strong></p>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="proceedToBooking()" disabled id="proceedBtn">Proceed to Payment</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 KSR Cinemas. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Override the updateBookingInfo function for this page
+        function updateBookingInfo(seats) {
+            const bookingInfo = document.querySelector('.booking-info');
+            const proceedBtn = document.getElementById('proceedBtn');
+            
+            if (bookingInfo) {
+                const seatCount = seats.length;
+                const pricePerSeat = 150;
+                const totalPrice = seatCount * pricePerSeat;
+                
+                bookingInfo.innerHTML = `
+                    <h3>Booking Summary</h3>
+                    <p>Selected Seats: ${seats.join(', ') || 'None'}</p>
+                    <p>Number of Seats: ${seatCount}</p>
+                    <p>Price per Seat: ₹${pricePerSeat}</p>
+                    <p><strong>Total Price: ₹${totalPrice}</strong></p>
+                `;
+                
+                proceedBtn.disabled = seatCount === 0;
+            }
+        }
+        
+        function proceedToBooking() {
+            const selectedSeats = Array.from(document.querySelectorAll('.seat.selected')).map(seat => seat.textContent);
+            if (selectedSeats.length > 0) {
+                // Store booking details in localStorage for the confirmation page
+                localStorage.setItem('bookingDetails', JSON.stringify({
+                    movie: 'Action Adventure',
+                    showtime: '7:00 PM',
+                    seats: selectedSeats,
+                    totalPrice: selectedSeats.length * 150
+                }));
+                window.location.href = 'confirmation.html';
+            }
+        }
+    </script>
+</body>
+</html>

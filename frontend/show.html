@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Times - KSR Cinemas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="logo">KSR CINEMAS</h1>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="movies.html">Movies</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="signup.html">Sign Up</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main style="padding: 2rem 0; min-height: 70vh;">
+        <div class="container">
+            <h1 style="text-align: center; margin-bottom: 2rem; color: #1a1a2e;">Select Show Time</h1>
+            
+            <div style="background: white; border-radius: 15px; padding: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                <h2 style="color: #e94560; margin-bottom: 1rem;">Action Adventure</h2>
+                <p style="color: #666; margin-bottom: 2rem;">Duration: 2h 30min | Genre: Action | Rating: PG-13</p>
+                
+                <h3 style="margin-bottom: 1rem;">Today - November 10, 2024</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '10:00 AM')">10:00 AM</button>
+                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '1:00 PM')">1:00 PM</button>
+                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '4:00 PM')">4:00 PM</button>
+                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '7:00 PM')">7:00 PM</button>
+                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '10:00 PM')">10:00 PM</button>
+                </div>
+                
+                <h3 style="margin-bottom: 1rem;">Tomorrow - November 11, 2024</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '10:00 AM')">10:00 AM</button>
+                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '1:00 PM')">1:00 PM</button>
+                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '4:00 PM')">4:00 PM</button>
+                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '7:00 PM')">7:00 PM</button>
+                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '10:00 PM')">10:00 PM</button>
+                </div>
+                
+                <div id="selected-show" style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 1rem; display: none;">
+                    <h4 style="color: #1a1a2e; margin-bottom: 0.5rem;">Selected Show:</h4>
+                    <p id="show-details" style="color: #666; margin-bottom: 1rem;"></p>
+                    <a href="seats.html" class="btn btn-primary">Select Seats</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 KSR Cinemas. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        function selectShowtime(button, time) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.showtime-btn').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-secondary');
+            });
+            
+            // Add active class to selected button
+            button.classList.remove('btn-secondary');
+            button.classList.add('btn-primary');
+            
+            // Show selected show details
+            const selectedShow = document.getElementById('selected-show');
+            const showDetails = document.getElementById('show-details');
+            
+            showDetails.textContent = `Action Adventure - ${time}`;
+            selectedShow.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

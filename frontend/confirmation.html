@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - KSR Cinemas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="logo">KSR CINEMAS</h1>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="movies.html">Movies</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="signup.html">Sign Up</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main style="padding: 2rem 0; min-height: 70vh;">
+        <div class="container">
+            <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+                <div style="background: white; border-radius: 15px; padding: 3rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <div style="color: #4caf50; font-size: 4rem; margin-bottom: 1rem;">✓</div>
+                    <h1 style="color: #1a1a2e; margin-bottom: 1rem;">Booking Confirmed!</h1>
+                    <p style="color: #666; margin-bottom: 2rem;">Thank you for choosing KSR Cinemas. Your booking has been successfully confirmed.</p>
+                    
+                    <div id="bookingDetails" style="background: #f8f9fa; padding: 2rem; border-radius: 10px; margin: 2rem 0; text-align: left;">
+                        <!-- Booking details will be loaded here -->
+                    </div>
+                    
+                    <div style="background: #e8f5e8; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+                        <h3 style="color: #4caf50; margin-bottom: 0.5rem;">Booking ID: #KSR2024001</h3>
+                        <p style="color: #666; margin: 0;">Please save this booking ID for your records</p>
+                    </div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <a href="movies.html" class="btn btn-primary" style="margin-right: 1rem;">Book Another Movie</a>
+                        <a href="index.html" class="btn btn-secondary">Go to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 KSR Cinemas. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Load booking details from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookingDetails = localStorage.getItem('bookingDetails');
+            const detailsContainer = document.getElementById('bookingDetails');
+            
+            if (bookingDetails) {
+                const booking = JSON.parse(bookingDetails);
+                detailsContainer.innerHTML = `
+                    <h3 style="color: #1a1a2e; margin-bottom: 1rem;">Booking Details</h3>
+                    <div style="display: grid; gap: 0.5rem;">
+                        <div><strong>Movie:</strong> ${booking.movie}</div>
+                        <div><strong>Show Time:</strong> ${booking.showtime}</div>
+                        <div><strong>Date:</strong> November 10, 2024</div>
+                        <div><strong>Seats:</strong> ${booking.seats.join(', ')}</div>
+                        <div><strong>Number of Tickets:</strong> ${booking.seats.length}</div>
+                        <div style="padding-top: 1rem; border-top: 2px solid #e94560; margin-top: 1rem;">
+                            <strong style="color: #e94560; font-size: 1.2rem;">Total Amount: ₹${booking.totalPrice}</strong>
+                        </div>
+                    </div>
+                `;
+                
+                // Clear the booking details from localStorage
+                localStorage.removeItem('bookingDetails');
+            } else {
+                detailsContainer.innerHTML = `
+                    <h3 style="color: #1a1a2e; margin-bottom: 1rem;">Booking Details</h3>
+                    <p style="color: #666;">No booking details found. Please book your tickets again.</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
