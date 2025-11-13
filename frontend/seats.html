@@ -10,12 +10,12 @@
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <h1 class="logo">KSR CINEMAS</h1>
-                <ul class="nav-menu">
-                    <li><a href="index.html">Home</a></li>
+                <h1 class="logo" id="smartLogo" style="cursor: pointer;">KSR CINEMAS</h1>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="home.html">Home</a></li>
                     <li><a href="movies.html">Movies</a></li>
-                    <li><a href="login.html">Login</a></li>
-                    <li><a href="signup.html">Sign Up</a></li>
+                    <li><a href="#" id="profileBtn" class="profile-name-btn">Profile</a></li>
+                    <li><a href="#" id="logoutBtn">Logout</a></li>
                 </ul>
             </div>
         </nav>
@@ -45,75 +45,18 @@
                 </div>
                 
                 <!-- Seats Grid -->
-                <div class="seats-grid">
-                    <!-- Row A -->
-                    <div class="seat available">A1</div>
-                    <div class="seat available">A2</div>
-                    <div class="seat occupied">A3</div>
-                    <div class="seat occupied">A4</div>
-                    <div class="seat available">A5</div>
-                    <div class="seat available">A6</div>
-                    <div class="seat available">A7</div>
-                    <div class="seat available">A8</div>
-                    <div class="seat available">A9</div>
-                    <div class="seat available">A10</div>
-                    
-                    <!-- Row B -->
-                    <div class="seat available">B1</div>
-                    <div class="seat available">B2</div>
-                    <div class="seat available">B3</div>
-                    <div class="seat available">B4</div>
-                    <div class="seat available">B5</div>
-                    <div class="seat available">B6</div>
-                    <div class="seat occupied">B7</div>
-                    <div class="seat occupied">B8</div>
-                    <div class="seat available">B9</div>
-                    <div class="seat available">B10</div>
-                    
-                    <!-- Row C -->
-                    <div class="seat available">C1</div>
-                    <div class="seat available">C2</div>
-                    <div class="seat available">C3</div>
-                    <div class="seat available">C4</div>
-                    <div class="seat available">C5</div>
-                    <div class="seat available">C6</div>
-                    <div class="seat available">C7</div>
-                    <div class="seat available">C8</div>
-                    <div class="seat available">C9</div>
-                    <div class="seat available">C10</div>
-                    
-                    <!-- Row D -->
-                    <div class="seat available">D1</div>
-                    <div class="seat available">D2</div>
-                    <div class="seat available">D3</div>
-                    <div class="seat available">D4</div>
-                    <div class="seat occupied">D5</div>
-                    <div class="seat occupied">D6</div>
-                    <div class="seat available">D7</div>
-                    <div class="seat available">D8</div>
-                    <div class="seat available">D9</div>
-                    <div class="seat available">D10</div>
-                    
-                    <!-- Row E -->
-                    <div class="seat available">E1</div>
-                    <div class="seat available">E2</div>
-                    <div class="seat available">E3</div>
-                    <div class="seat available">E4</div>
-                    <div class="seat available">E5</div>
-                    <div class="seat available">E6</div>
-                    <div class="seat available">E7</div>
-                    <div class="seat available">E8</div>
-                    <div class="seat available">E9</div>
-                    <div class="seat available">E10</div>
+                <div class="seats-grid" id="seats-grid">
+                    <!-- Seats will be loaded dynamically -->
+                    <div class="loading-message">Loading seats...</div>
                 </div>
                 
                 <!-- Booking Summary -->
                 <div class="booking-info" style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 2rem;">
                     <h3>Booking Summary</h3>
-                    <p>Selected Seats: None</p>
-                    <p>Number of Seats: 0</p>
-                    <p>Price per Seat: ₹150</p>
-                    <p><strong>Total Price: ₹0</strong></p>
+                    <p>Selected Seats: <span id="selected-seats">None</span></p>
+                    <p>Number of Seats: <span id="seat-count">0</span></p>
+                    <p>Price per Seat: ₹<span id="price-per-seat">200</span></p>
+                    <p><strong>Total Price: ₹<span id="total-price">0</span></strong></p>
                 </div>
                 
                 <div style="text-align: center; margin-top: 2rem;">
@@ -130,42 +73,227 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="js/profile-modal.js"></script>
     <script>
-        // Override the updateBookingInfo function for this page
-        function updateBookingInfo(seats) {
-            const bookingInfo = document.querySelector('.booking-info');
-            const proceedBtn = document.getElementById('proceedBtn');
+        let selectedSeats = [];
+        let currentShowtimeId = 1; // Default showtime ID
+        let pricePerSeat = 200;
+        
+        // Load seats on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Get showtime ID from URL parameter (you can implement this)
+            const urlParams = new URLSearchParams(window.location.search);
+            currentShowtimeId = urlParams.get('showtimeId') || 1;
             
-            if (bookingInfo) {
-                const seatCount = seats.length;
-                const pricePerSeat = 150;
-                const totalPrice = seatCount * pricePerSeat;
+            await loadSeats();
+        });
+
+        async function loadSeats() {
+            try {
+                const response = await fetch(`http://localhost:8081/api/seats?showtimeId=${currentShowtimeId}`);
+                const seatData = await response.json();
                 
-                bookingInfo.innerHTML = `
-                    <h3>Booking Summary</h3>
-                    <p>Selected Seats: ${seats.join(', ') || 'None'}</p>
-                    <p>Number of Seats: ${seatCount}</p>
-                    <p>Price per Seat: ₹${pricePerSeat}</p>
-                    <p><strong>Total Price: ₹${totalPrice}</strong></p>
-                `;
+                if (seatData.available && seatData.occupied) {
+                    displaySeats(seatData.available, seatData.occupied);
+                } else {
+                    console.error('Invalid seat data received');
+                }
+            } catch (error) {
+                console.error('Error loading seats:', error);
+                // Fallback to static seats
+                displayFallbackSeats();
+            }
+        }
+
+        function displaySeats(availableSeats, occupiedSeats) {
+            const seatsGrid = document.getElementById('seats-grid');
+            let seatsHTML = '';
+            
+            // Generate all possible seats (A1-E10)
+            const rows = ['A', 'B', 'C', 'D', 'E'];
+            const seatsPerRow = 10;
+            
+            rows.forEach(row => {
+                for (let i = 1; i <= seatsPerRow; i++) {
+                    const seatNumber = row + i;
+                    let seatClass = 'seat ';
+                    
+                    if (occupiedSeats.includes(seatNumber)) {
+                        seatClass += 'occupied';
+                    } else {
+                        seatClass += 'available';
+                    }
+                    
+                    seatsHTML += `<div class="${seatClass}" data-seat="${seatNumber}" onclick="toggleSeat('${seatNumber}')">${seatNumber}</div>`;
+                }
+            });
+            
+            seatsGrid.innerHTML = seatsHTML;
+        }
+
+        function displayFallbackSeats() {
+            const seatsGrid = document.getElementById('seats-grid');
+            let seatsHTML = '';
+            
+            // Generate static seats for fallback
+            const rows = ['A', 'B', 'C', 'D', 'E'];
+            const seatsPerRow = 10;
+            const preOccupiedSeats = ['A3', 'A4', 'B7', 'B8', 'D5', 'D6'];
+            
+            rows.forEach(row => {
+                for (let i = 1; i <= seatsPerRow; i++) {
+                    const seatNumber = row + i;
+                    let seatClass = 'seat ';
+                    
+                    if (preOccupiedSeats.includes(seatNumber)) {
+                        seatClass += 'occupied';
+                    } else {
+                        seatClass += 'available';
+                    }
+                    
+                    seatsHTML += `<div class="${seatClass}" data-seat="${seatNumber}" onclick="toggleSeat('${seatNumber}')">${seatNumber}</div>`;
+                }
+            });
+            
+            seatsGrid.innerHTML = seatsHTML;
+        }
+
+        function toggleSeat(seatNumber) {
+            const seatElement = document.querySelector(`[data-seat="${seatNumber}"]`);
+            
+            if (seatElement.classList.contains('occupied')) {
+                return; // Can't select occupied seats
+            }
+            
+            if (seatElement.classList.contains('selected')) {
+                // Deselect seat
+                seatElement.classList.remove('selected');
+                seatElement.classList.add('available');
+                selectedSeats = selectedSeats.filter(seat => seat !== seatNumber);
+            } else {
+                // Select seat
+                seatElement.classList.remove('available');
+                seatElement.classList.add('selected');
+                selectedSeats.push(seatNumber);
+            }
+            
+            updateBookingInfo();
+        }
+
+        function updateBookingInfo() {
+            const seatCount = selectedSeats.length;
+            const totalPrice = seatCount * pricePerSeat;
+            
+            document.getElementById('selected-seats').textContent = selectedSeats.join(', ') || 'None';
+            document.getElementById('seat-count').textContent = seatCount;
+            document.getElementById('total-price').textContent = totalPrice;
+            
+            const proceedBtn = document.getElementById('proceedBtn');
+            proceedBtn.disabled = seatCount === 0;
+        }
+        
+        async function proceedToBooking() {
+            if (selectedSeats.length === 0) {
+                alert('Please select at least one seat');
+                return;
+            }
+            
+            // Check if user is logged in
+            const userLoggedIn = localStorage.getItem('userLoggedIn');
+            if (!userLoggedIn) {
+                alert('Please login first to book seats');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Get user details from localStorage
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('User session expired. Please login again.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Get movie details from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieName = urlParams.get('movie') || 'Action Adventure';
+            const showTime = urlParams.get('time') || '7:00 PM';
+            
+            // Create booking timestamp
+            const bookingTime = new Date().toLocaleString();
+            
+            const bookingData = {
+                showtimeId: currentShowtimeId,
+                seatNumbers: selectedSeats.join(','),
+                totalAmount: selectedSeats.length * pricePerSeat,
+                userId: currentUser.id,
+                movieName: movieName,
+                showTime: showTime
+            };
+            
+            // Store booking details BEFORE making the API call
+            const bookingDetailsForConfirmation = {
+                movieName: movieName,
+                showTime: showTime,
+                seats: [...selectedSeats], // Create a copy of the array
+                totalAmount: selectedSeats.length * pricePerSeat,
+                userName: currentUser.username,
+                userEmail: currentUser.email,
+                userPhone: currentUser.phoneNumber,
+                bookingTime: bookingTime
+            };
+            
+            console.log('Booking details to store:', bookingDetailsForConfirmation);
+            
+            try {
+                const formData = new URLSearchParams(bookingData);
+                const response = await fetch('http://localhost:8081/api/booking', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData
+                });
                 
-                proceedBtn.disabled = seatCount === 0;
+                const result = await response.json();
+                console.log('Booking API response:', result);
+                
+                if (result.success) {
+                    // Store booking details for confirmation page
+                    localStorage.setItem('bookingDetails', JSON.stringify(bookingDetailsForConfirmation));
+                    console.log('Booking details stored in localStorage');
+                    
+                    // Reload seats to show updated status first
+                    await loadSeats();
+                    selectedSeats = [];
+                    updateBookingInfo();
+                    
+                    // Show success message and redirect after a brief delay
+                    alert('Booking successful! Redirecting to confirmation...');
+                    setTimeout(() => {
+                        window.location.href = 'confirmation.html';
+                    }, 1500);
+                } else {
+                    alert('Booking failed: ' + (result.message || result.error || 'Unknown error'));
+                    // Reload seats to show updated status
+                    await loadSeats();
+                    selectedSeats = [];
+                    updateBookingInfo();
+                }
+            } catch (error) {
+                console.error('Booking error:', error);
+                alert('Error processing booking. Please try again.');
             }
         }
         
-        function proceedToBooking() {
-            const selectedSeats = Array.from(document.querySelectorAll('.seat.selected')).map(seat => seat.textContent);
-            if (selectedSeats.length > 0) {
-                // Store booking details in localStorage for the confirmation page
-                localStorage.setItem('bookingDetails', JSON.stringify({
-                    movie: 'Action Adventure',
-                    showtime: '7:00 PM',
-                    seats: selectedSeats,
-                    totalPrice: selectedSeats.length * 150
-                }));
-                window.location.href = 'confirmation.html';
-            }
-        }
+        // Logout functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize profile navbar functionality
+            initializeProfileNavbar();
+            
+            // Initialize seat loading
+            loadSeats();
+        });
     </script>
 </body>
 </html>

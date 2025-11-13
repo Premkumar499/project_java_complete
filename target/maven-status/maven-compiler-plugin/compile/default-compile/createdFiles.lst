@@ -1,10 +1,13 @@
+com/ksr/model/BookingHistory.class
 com/ksr/servlet/BookingServlet.class
 com/ksr/servlet/SeatServlet.class
 com/ksr/servlet/LoginServlet.class
 com/ksr/dao/BookingDAO.class
+com/ksr/controller/BookingHistoryController.class
 com/ksr/dao/ShowDAO.class
 com/ksr/servlet/ShowServlet.class
 com/ksr/dao/MovieDAO.class
+com/ksr/controller/LoginController.class
 com/ksr/servlet/MovieServlet.class
 com/ksr/Application.class
 com/ksr/dao/SeatDAO.class
@@ -12,5 +15,9 @@ com/ksr/dao/UserDAO.class
 com/ksr/model/User.class
 com/ksr/model/Showtime.class
 com/ksr/dao/DatabaseConnection.class
+com/ksr/dao/BookingHistoryDAO.class
+com/ksr/servlet/UserBookingHistoryServlet.class
+com/ksr/servlet/BookingHistoryServlet.class
+com/ksr/controller/LoginController$LoginRequest.class
 com/ksr/model/Movie.class
 com/ksr/servlet/RegisterServlet.class

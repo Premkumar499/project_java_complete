@@ -1,0 +1,130 @@
+[
+  {
+    "id": 1,
+    "title": "Avengers: Endgame",
+    "description": "The culmination of the Marvel Cinematic Universe saga.",
+    "genre": "Action",
+    "duration": 181,
+    "releaseDate": "2019-04-26",
+    "language": "English",
+    "rating": "PG-13",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
+    "backdropUrl": "https://image.tmdb.org/t/p/w1280/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
+    "showtimes": [
+      {
+        "time": "10:00",
+        "theater": "Screen 1",
+        "price": 250.00,
+        "availableSeats": 150
+      },
+      {
+        "time": "14:00",
+        "theater": "Screen 1", 
+        "price": 300.00,
+        "availableSeats": 150
+      },
+      {
+        "time": "18:00",
+        "theater": "Screen 1",
+        "price": 350.00,
+        "availableSeats": 150
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Pushpa: The Rise",
+    "description": "A rugged laborer rises through the ranks of a red sandalwood smuggling syndicate.",
+    "genre": "Action",
+    "duration": 179,
+    "releaseDate": "2021-12-17",
+    "language": "Telugu",
+    "rating": "U/A",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/pU4vKKTB8OL6HPcnKWdDrjQSsHf.jpg",
+    "backdropUrl": "https://image.tmdb.org/t/p/w1280/3g8MpanCRzODhJCFrF2LtGl8UGd.jpg",
+    "showtimes": [
+      {
+        "time": "11:00",
+        "theater": "Screen 2",
+        "price": 200.00,
+        "availableSeats": 200
+      },
+      {
+        "time": "15:00", 
+        "theater": "Screen 2",
+        "price": 250.00,
+        "availableSeats": 200
+      },
+      {
+        "time": "19:00",
+        "theater": "Screen 2",
+        "price": 300.00,
+        "availableSeats": 200
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "RRR",
+    "description": "A fictional story about two legendary revolutionaries and their journey away from home.",
+    "genre": "Period Drama",
+    "duration": 187,
+    "releaseDate": "2022-03-25",
+    "language": "Telugu",
+    "rating": "U/A",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/nWiQXjkM7qOdyZkyLoKGDLKZKOT.jpg",
+    "backdropUrl": "https://image.tmdb.org/t/p/w1280/suaEOtk1N1sgg2MTM7oZd2cfVp3.jpg",
+    "showtimes": [
+      {
+        "time": "12:00",
+        "theater": "Screen 3",
+        "price": 280.00,
+        "availableSeats": 120
+      },
+      {
+        "time": "16:00",
+        "theater": "Screen 3", 
+        "price": 320.00,
+        "availableSeats": 120
+      },
+      {
+        "time": "20:00",
+        "theater": "Screen 3",
+        "price": 380.00,
+        "availableSeats": 120
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Spider-Man: No Way Home",
+    "description": "Peter Parker seeks Doctor Strange's help to make everyone forget his identity as Spider-Man.",
+    "genre": "Action",
+    "duration": 148,
+    "releaseDate": "2021-12-17",
+    "language": "English",
+    "rating": "PG-13",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+    "backdropUrl": "https://image.tmdb.org/t/p/w1280/14QbnygCuTO0vl7CAFmPf1fgZfV.jpg",
+    "showtimes": [
+      {
+        "time": "10:30",
+        "theater": "Screen 1",
+        "price": 220.00,
+        "availableSeats": 150
+      },
+      {
+        "time": "14:30",
+        "theater": "Screen 1",
+        "price": 270.00,
+        "availableSeats": 150
+      },
+      {
+        "time": "18:30",
+        "theater": "Screen 1", 
+        "price": 320.00,
+        "availableSeats": 150
+      }
+    ]
+  }
+]

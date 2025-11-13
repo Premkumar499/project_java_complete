@@ -10,10 +10,11 @@
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <h1 class="logo">KSR CINEMAS</h1>
+                <h1 class="logo" id="smartLogo" style="cursor: pointer;">KSR CINEMAS</h1>
                 <ul class="nav-menu">
                     <li><a href="home.html">Home</a></li>
                     <li><a href="movies.html">Movies</a></li>
+                    <li><a href="#" id="profileBtn" class="profile-name-btn">Profile</a></li>
                     <li><a href="#" id="logoutBtn">Logout</a></li>
                 </ul>
             </div>
@@ -28,26 +29,6 @@
                 <div class="hero-buttons">
                     <a href="movies.html" class="btn btn-primary">Book Now</a>
                     <a href="#about" class="btn btn-secondary">Learn More</a>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="about">
-            <div class="container">
-                <h2>Why Choose KSR Cinemas?</h2>
-                <div class="features">
-                    <div class="feature">
-                        <h3>Premium Experience</h3>
-                        <p>Enjoy movies in our comfortable recliner seats with crystal clear sound and picture quality.</p>
-                    </div>
-                    <div class="feature">
-                        <h3>Latest Movies</h3>
-                        <p>Watch the latest blockbusters and exclusive premieres before anyone else.</p>
-                    </div>
-                    <div class="feature">
-                        <h3>Easy Booking</h3>
-                        <p>Book your tickets online with our simple and secure booking system.</p>
-                    </div>
                 </div>
             </div>
         </section>
@@ -78,5 +59,18 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="js/profile-modal.js"></script>
+    <script>
+        // Check if user is logged in
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'index.html';
+        }
+        
+        // Initialize profile and navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize profile navbar functionality
+            initializeProfileNavbar();
+        });
+    </script>
 </body>
 </html>

@@ -10,10 +10,11 @@
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <h1 class="logo">KSR CINEMAS</h1>
+                <h1 class="logo" id="smartLogo" style="cursor: pointer;">KSR CINEMAS</h1>
                 <ul class="nav-menu">
                     <li><a href="home.html">Home</a></li>
                     <li><a href="movies.html">Movies</a></li>
+                    <li><a href="#" id="profileBtn" class="profile-name-btn">Profile</a></li>
                     <li><a href="#" id="logoutBtn">Logout</a></li>
                 </ul>
             </div>
@@ -95,5 +96,13 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="js/profile-modal.js"></script>
+    <script>
+        // Initialize page functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize profile navbar functionality
+            initializeProfileNavbar();
+        });
+    </script>
 </body>
 </html>

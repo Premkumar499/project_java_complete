@@ -71,13 +71,7 @@ CREATE TABLE bookings (
     FOREIGN KEY (showtime_id) REFERENCES showtimes(id) ON DELETE CASCADE
 );
 
--- Insert sample data
-INSERT INTO movies (title, description, genre, duration, release_date, language, rating) VALUES
-('Avengers: Endgame', 'The culmination of the Marvel Cinematic Universe saga.', 'Action', 181, '2019-04-26', 'English', 'PG-13'),
-('Pushpa: The Rise', 'A rugged laborer rises through the ranks of a red sandalwood smuggling syndicate.', 'Action', 179, '2021-12-17', 'Telugu', 'U/A'),
-('RRR', 'A fictional story about two legendary revolutionaries and their journey away from home.', 'Period Drama', 187, '2022-03-25', 'Telugu', 'U/A'),
-('Spider-Man: No Way Home', 'Peter Parker seeks Doctor Strange\'s help to make everyone forget his identity as Spider-Man.', 'Action', 148, '2021-12-17', 'English', 'PG-13'),
-('KGF Chapter 2', 'Rocky continues his rise to power as the king of the Kolar Gold Fields.', 'Action', 168, '2022-04-14', 'Kannada', 'U/A');
+-- Insert sample data (movies will be loaded from JSON)
 
 INSERT INTO theaters (name, total_seats) VALUES
 ('Screen 1', 150),

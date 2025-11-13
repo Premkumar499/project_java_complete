@@ -10,12 +10,12 @@
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <h1 class="logo">KSR CINEMAS</h1>
-                <ul class="nav-menu">
-                    <li><a href="index.html">Home</a></li>
+                <h1 class="logo" id="smartLogo" style="cursor: pointer;">KSR CINEMAS</h1>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="home.html">Home</a></li>
                     <li><a href="movies.html">Movies</a></li>
-                    <li><a href="login.html">Login</a></li>
-                    <li><a href="signup.html">Sign Up</a></li>
+                    <li><a href="#" id="profileBtn" class="profile-name-btn">Profile</a></li>
+                    <li><a href="#" id="logoutBtn">Logout</a></li>
                 </ul>
             </div>
         </nav>
@@ -54,31 +54,58 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="js/profile-modal.js"></script>
     <script>
         // Load booking details from localStorage
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Loading confirmation page...');
+            
+            // Initialize profile navbar functionality
+            initializeProfileNavbar();
+            
             const bookingDetails = localStorage.getItem('bookingDetails');
             const detailsContainer = document.getElementById('bookingDetails');
             
-            if (bookingDetails) {
-                const booking = JSON.parse(bookingDetails);
-                detailsContainer.innerHTML = `
-                    <h3 style="color: #1a1a2e; margin-bottom: 1rem;">Booking Details</h3>
-                    <div style="display: grid; gap: 0.5rem;">
-                        <div><strong>Movie:</strong> ${booking.movie}</div>
-                        <div><strong>Show Time:</strong> ${booking.showtime}</div>
-                        <div><strong>Date:</strong> November 10, 2024</div>
-                        <div><strong>Seats:</strong> ${booking.seats.join(', ')}</div>
-                        <div><strong>Number of Tickets:</strong> ${booking.seats.length}</div>
-                        <div style="padding-top: 1rem; border-top: 2px solid #e94560; margin-top: 1rem;">
-                            <strong style="color: #e94560; font-size: 1.2rem;">Total Amount: ₹${booking.totalPrice}</strong>
+            console.log('Raw booking details from localStorage:', bookingDetails);
+            
+            if (bookingDetails && bookingDetails !== 'null') {
+                try {
+                    const booking = JSON.parse(bookingDetails);
+                    console.log('Parsed booking details:', booking);
+                    
+                    detailsContainer.innerHTML = `
+                        <h3 style="color: #1a1a2e; margin-bottom: 1rem;">Booking Details</h3>
+                        <div style="display: grid; gap: 0.8rem;">
+                            <div><strong>Customer Name:</strong> ${booking.userName || 'Guest'}</div>
+                            <div><strong>Email:</strong> ${booking.userEmail || 'N/A'}</div>
+                            <div><strong>Phone:</strong> ${booking.userPhone || 'N/A'}</div>
+                            <hr style="margin: 0.5rem 0; border: 1px solid #ddd;">
+                            <div><strong>Movie:</strong> ${booking.movieName || booking.movie || 'N/A'}</div>
+                            <div><strong>Show Time:</strong> ${booking.showTime || booking.showtime || 'N/A'}</div>
+                            <div><strong>Booking Date:</strong> ${booking.bookingTime || new Date().toLocaleString()}</div>
+                            <div><strong>Seats:</strong> ${Array.isArray(booking.seats) ? booking.seats.join(', ') : (booking.seats || 'N/A')}</div>
+                            <div><strong>Number of Tickets:</strong> ${Array.isArray(booking.seats) ? booking.seats.length : 1}</div>
+                            <div style="padding-top: 1rem; border-top: 2px solid #e94560; margin-top: 1rem;">
+                                <strong style="color: #e94560; font-size: 1.2rem;">Total Amount: ₹${booking.totalAmount || booking.totalPrice || '0'}</strong>
+                            </div>
                         </div>
-                    </div>
-                `;
-                
-                // Clear the booking details from localStorage
-                localStorage.removeItem('bookingDetails');
+                    `;
+                    
+                    // Clear the booking details from localStorage after a delay
+                    setTimeout(() => {
+                        localStorage.removeItem('bookingDetails');
+                        console.log('Booking details cleared from localStorage');
+                    }, 5000); // Wait 5 seconds before clearing
+                    
+                } catch (error) {
+                    console.error('Error parsing booking details:', error);
+                    detailsContainer.innerHTML = `
+                        <h3 style="color: #1a1a2e; margin-bottom: 1rem;">Booking Details</h3>
+                        <p style="color: #666;">Error loading booking details. Raw data: ${bookingDetails}</p>
+                    `;
+                }
             } else {
+                console.log('No booking details found in localStorage');
                 detailsContainer.innerHTML = `
                     <h3 style="color: #1a1a2e; margin-bottom: 1rem;">Booking Details</h3>
                     <p style="color: #666;">No booking details found. Please book your tickets again.</p>

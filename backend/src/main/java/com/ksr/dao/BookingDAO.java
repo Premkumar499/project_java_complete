@@ -25,4 +25,19 @@ public class BookingDAO {
             return false;
         }
     }
+    
+    public boolean cancelBooking(int bookingId) {
+        String sql = "UPDATE bookings SET status = 'CANCELLED' WHERE id = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, bookingId);
+            return pstmt.executeUpdate() > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

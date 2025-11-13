@@ -94,7 +94,8 @@ function initializeApp() {
     // Check if user is logged in
     const currentUser = getStoredUser();
     if (currentUser) {
-        updateUIForLoggedInUser(currentUser);
+        // updateUIForLoggedInUser(currentUser); // Disabled - navbar now handled statically
+        console.log('User is logged in:', currentUser.username);
     }
 }
 
@@ -231,16 +232,19 @@ async function loadMoviesFromAPI() {
     
     showMessage('Loading movies...', 'info');
     
-    const response = await apiCall('/movies');
-    
-    if (response && response.movies) {
-        displayMovies(response.movies);
-        hideMessage();
-    } else if (response && Array.isArray(response)) {
-        displayMovies(response);
-        hideMessage();
-    } else {
-        // Fallback to static content if API fails
+    try {
+        // Load movies from local JSON file
+        const response = await fetch('./data/movies.json');
+        const movies = await response.json();
+        
+        if (movies && Array.isArray(movies)) {
+            displayMovies(movies);
+            hideMessage();
+        } else {
+            throw new Error('Invalid movie data format');
+        }
+    } catch (error) {
+        console.error('Error loading movies:', error);
         showMessage('Unable to load movies. Please try again later.', 'error');
         setTimeout(() => hideMessage(), 3000);
     }
@@ -253,7 +257,9 @@ function displayMovies(movies) {
     
     moviesContainer.innerHTML = movies.map(movie => `
         <div class="movie-card" data-movie-id="${movie.id}">
-            <div class="movie-poster">${movie.title}</div>
+            <div class="movie-poster" style="background-image: url('${movie.posterUrl || movie.backdropUrl}');">
+                <div class="movie-title-overlay">${movie.title}</div>
+            </div>
             <div class="movie-info">
                 <h3>${movie.title}</h3>
                 <p>${movie.description || 'An exciting movie experience awaits you.'}</p>
@@ -279,32 +285,9 @@ function clearStoredUser() {
 }
 
 function updateUIForLoggedInUser(user) {
-    // Update navigation to show logout instead of login/signup
-    const navMenu = document.querySelector('.nav-menu');
-    if (navMenu) {
-        const loginLink = navMenu.querySelector('a[href="login.html"]');
-        const signupLink = navMenu.querySelector('a[href="signup.html"]');
-        
-        if (loginLink) {
-            loginLink.textContent = `Welcome, ${user.fullName || user.username || user.email}`;
-            loginLink.href = '#';
-            loginLink.style.color = '#e94560';
-            loginLink.style.cursor = 'default';
-        }
-        
-        if (signupLink) {
-            signupLink.textContent = 'Logout';
-            signupLink.href = '#';
-            signupLink.style.color = '#fff';
-            signupLink.style.backgroundColor = '#e94560';
-            signupLink.style.padding = '8px 15px';
-            signupLink.style.borderRadius = '5px';
-            signupLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                handleLogout();
-            });
-        }
-    }
+    // Navigation is now handled statically in HTML files
+    // This function is disabled to maintain consistent navbar across all pages
+    console.log('User logged in:', user.username);
 }
 
 function handleLogout() {
@@ -317,19 +300,6 @@ function handleLogout() {
 
 function clearStoredUser() {
     localStorage.removeItem('currentUser');
-}
-
-function updateUIForLoggedInUser(user) {
-    // Update navigation to show user info
-    const navMenu = document.querySelector('.nav-menu');
-    if (navMenu) {
-        const loginLink = navMenu.querySelector('a[href="login.html"]');
-        if (loginLink) {
-            loginLink.innerHTML = `Welcome, ${user.username}`;
-            loginLink.href = '#';
-            loginLink.addEventListener('click', handleLogout);
-        }
-    }
 }
 
 function handleLogout(e) {
@@ -361,14 +331,14 @@ async function proceedToBooking() {
     
     const bookingData = {
         userId: currentUser.id,
-        showtimeId: getSelectedShowtimeId(), // You'll need to implement this
+        showtimeId: getSelectedShowtimeId(),
         seatNumbers: selectedSeats,
-        totalPrice: selectedSeats.length * 150
+        totalPrice: selectedSeats.length * 200
     };
     
     showMessage('Processing booking...', 'info');
     
-    const response = await apiCall('/book', {
+    const response = await apiCall('/booking', {
         method: 'POST',
         body: JSON.stringify(bookingData)
     });
@@ -536,7 +506,7 @@ function updateBookingInfo(seats) {
     
     if (bookingInfo) {
         const seatCount = seats.length;
-        const pricePerSeat = 150;
+        const pricePerSeat = 200;
         const totalPrice = seatCount * pricePerSeat;
         
         bookingInfo.innerHTML = `

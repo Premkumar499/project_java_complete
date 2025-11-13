@@ -10,12 +10,12 @@
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <h1 class="logo">KSR CINEMAS</h1>
-                <ul class="nav-menu">
-                    <li><a href="index.html">Home</a></li>
+                <h1 class="logo" id="smartLogo" style="cursor: pointer;">KSR CINEMAS</h1>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="home.html">Home</a></li>
                     <li><a href="movies.html">Movies</a></li>
-                    <li><a href="login.html">Login</a></li>
-                    <li><a href="signup.html">Sign Up</a></li>
+                    <li><a href="#" id="profileBtn" class="profile-name-btn">Profile</a></li>
+                    <li><a href="#" id="logoutBtn">Logout</a></li>
                 </ul>
             </div>
         </nav>
@@ -25,33 +25,24 @@
         <div class="container">
             <h1 style="text-align: center; margin-bottom: 2rem; color: #1a1a2e;">Select Show Time</h1>
             
-            <div style="background: white; border-radius: 15px; padding: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-                <h2 style="color: #e94560; margin-bottom: 1rem;">Action Adventure</h2>
-                <p style="color: #666; margin-bottom: 2rem;">Duration: 2h 30min | Genre: Action | Rating: PG-13</p>
-                
-                <h3 style="margin-bottom: 1rem;">Today - November 10, 2024</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '10:00 AM')">10:00 AM</button>
-                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '1:00 PM')">1:00 PM</button>
-                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '4:00 PM')">4:00 PM</button>
-                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '7:00 PM')">7:00 PM</button>
-                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '10:00 PM')">10:00 PM</button>
+            <!-- Simple Movie Info -->
+            <div class="simple-movie-card">
+                <h2 id="movie-title">Loading...</h2>
+                <p id="movie-info">Loading movie information...</p>
+            </div>
+            
+            <!-- Simple Showtimes -->
+            <div class="simple-showtimes">
+                <h3>Available Times</h3>
+                <div id="times-grid" class="times-grid">
+                    <!-- Times will be loaded here -->
                 </div>
-                
-                <h3 style="margin-bottom: 1rem;">Tomorrow - November 11, 2024</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '10:00 AM')">10:00 AM</button>
-                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '1:00 PM')">1:00 PM</button>
-                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '4:00 PM')">4:00 PM</button>
-                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '7:00 PM')">7:00 PM</button>
-                    <button class="btn btn-secondary showtime-btn" onclick="selectShowtime(this, '10:00 PM')">10:00 PM</button>
-                </div>
-                
-                <div id="selected-show" style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 1rem; display: none;">
-                    <h4 style="color: #1a1a2e; margin-bottom: 0.5rem;">Selected Show:</h4>
-                    <p id="show-details" style="color: #666; margin-bottom: 1rem;"></p>
-                    <a href="seats.html" class="btn btn-primary">Select Seats</a>
-                </div>
+            </div>
+            
+            <!-- Selected Show -->
+            <div id="selected-show" class="simple-selected" style="display: none;">
+                <p id="show-details"></p>
+                <a href="seats.html" class="btn btn-primary">Book Tickets</a>
             </div>
         </div>
     </main>
@@ -63,25 +54,77 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="js/profile-modal.js"></script>
     <script>
-        function selectShowtime(button, time) {
-            // Remove active class from all buttons
-            document.querySelectorAll('.showtime-btn').forEach(btn => {
-                btn.classList.remove('btn-primary');
-                btn.classList.add('btn-secondary');
+        let currentMovie = null;
+
+        // Load movie data on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadMovieData();
+        });
+
+        async function loadMovieData() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const movieId = urlParams.get('movieId') || '2';
+                
+                const response = await fetch('./data/movies.json');
+                const movies = await response.json();
+                
+                currentMovie = movies.find(movie => movie.id == movieId);
+                
+                if (currentMovie) {
+                    displaySimpleMovieInfo(currentMovie);
+                    displaySimpleShowtimes(currentMovie);
+                }
+            } catch (error) {
+                console.error('Error loading movie data:', error);
+            }
+        }
+
+        function displaySimpleMovieInfo(movie) {
+            document.getElementById('movie-title').textContent = movie.title;
+            document.getElementById('movie-info').textContent = 
+                `${movie.duration} min • ${movie.genre} • ${movie.rating}`;
+        }
+
+        function displaySimpleShowtimes(movie) {
+            const container = document.getElementById('times-grid');
+            
+            if (!movie.showtimes || movie.showtimes.length === 0) {
+                container.innerHTML = '<p>No showtimes available</p>';
+                return;
+            }
+
+            container.innerHTML = movie.showtimes.map(showtime => `
+                <button class="time-btn" onclick="selectTime('${showtime.time}', '${showtime.theater}', '${showtime.price}')">
+                    <div class="time">${showtime.time}</div>
+                    <div class="theater">${showtime.theater}</div>
+                    <div class="price">₹${showtime.price}</div>
+                </button>
+            `).join('');
+        }
+
+        function selectTime(time, theater, price) {
+            // Remove active from all buttons
+            document.querySelectorAll('.time-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
             
-            // Add active class to selected button
-            button.classList.remove('btn-secondary');
-            button.classList.add('btn-primary');
+            // Add active to clicked button
+            event.target.closest('.time-btn').classList.add('active');
             
-            // Show selected show details
-            const selectedShow = document.getElementById('selected-show');
-            const showDetails = document.getElementById('show-details');
-            
-            showDetails.textContent = `Action Adventure - ${time}`;
-            selectedShow.style.display = 'block';
+            // Show selection
+            document.getElementById('show-details').textContent = 
+                `${currentMovie.title} • ${time} • ${theater} • ₹${price}`;
+            document.getElementById('selected-show').style.display = 'block';
         }
+        
+        // Logout functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize profile navbar functionality
+            initializeProfileNavbar();
+        });
     </script>
 </body>
 </html>
