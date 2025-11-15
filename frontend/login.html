@@ -39,27 +39,8 @@
 
     <script src="js/main.js"></script>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // Simple validation for demo purposes
-            if (email && password) {
-                // Store user session (simplified)
-                localStorage.setItem('userLoggedIn', 'true');
-                localStorage.setItem('userEmail', email);
-                
-                // Show success message
-                alert('Login successful! Redirecting to home page...');
-                
-                // Redirect to home page
-                window.location.href = 'home.html';
-            } else {
-                alert('Please enter both email and password');
-            }
-        });
+        // Remove the duplicate login form handler since it's now handled in main.js
+        // The main.js file already has proper backend integration for login
     </script>
 </body>
 </html>

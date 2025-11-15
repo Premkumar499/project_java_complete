@@ -14,8 +14,8 @@ function initializeProfileNavbar() {
     const smartLogo = document.getElementById('smartLogo');
     if (smartLogo) {
         smartLogo.addEventListener('click', function() {
-            const isLoggedIn = localStorage.getItem('userLoggedIn');
-            if (isLoggedIn) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (currentUser.id) {
                 window.location.href = 'home.html';
             } else {
                 window.location.href = 'index.html';
@@ -36,11 +36,10 @@ function initializeProfileNavbar() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            localStorage.removeItem('userLoggedIn');
             localStorage.removeItem('currentUser');
             localStorage.removeItem('bookingDetails');
             alert('Logged out successfully!');
-            window.location.href = 'index.html';
+            window.location.href = 'login.html';
         });
     }
 }

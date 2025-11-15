@@ -63,19 +63,53 @@ public class SeatDAO {
     }
     
     public boolean bookSeats(int showtimeId, List<String> seatNumbers) {
-        String sql = "UPDATE seats SET is_booked = true WHERE showtime_id = ? AND seat_number = ?";
+        String checkSql = "SELECT COUNT(*) FROM seats WHERE showtime_id = ? AND seat_number = ? AND is_booked = false";
+        String updateSql = "UPDATE seats SET is_booked = true WHERE showtime_id = ? AND seat_number = ? AND is_booked = false";
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // Start transaction
+            conn.setAutoCommit(false);
             
-            for (String seatNumber : seatNumbers) {
-                pstmt.setInt(1, showtimeId);
-                pstmt.setString(2, seatNumber);
-                pstmt.addBatch();
+            // First, check if all seats are available
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+                for (String seatNumber : seatNumbers) {
+                    checkStmt.setInt(1, showtimeId);
+                    checkStmt.setString(2, seatNumber);
+                    ResultSet rs = checkStmt.executeQuery();
+                    rs.next();
+                    int count = rs.getInt(1);
+                    if (count == 0) {
+                        // Seat not available
+                        conn.rollback();
+                        conn.setAutoCommit(true);
+                        return false;
+                    }
+                }
             }
             
-            int[] results = pstmt.executeBatch();
-            return results.length == seatNumbers.size();
+            // All seats are available, now book them
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                int successfulUpdates = 0;
+                for (String seatNumber : seatNumbers) {
+                    updateStmt.setInt(1, showtimeId);
+                    updateStmt.setString(2, seatNumber);
+                    int rowsUpdated = updateStmt.executeUpdate();
+                    if (rowsUpdated > 0) {
+                        successfulUpdates++;
+                    }
+                }
+                
+                // Check if all seats were successfully booked
+                if (successfulUpdates == seatNumbers.size()) {
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                    return true;
+                } else {
+                    conn.rollback();
+                    conn.setAutoCommit(true);
+                    return false;
+                }
+            }
             
         } catch (SQLException e) {
             e.printStackTrace();

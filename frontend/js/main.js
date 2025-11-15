@@ -38,13 +38,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Form validation if forms exist
+    // Form validation if forms exist (exclude signup form which has its own handler)
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            handleFormSubmit(this);
-        });
+        if (form.id !== 'signupForm') { // Exclude signup form
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleFormSubmit(this);
+            });
+        }
     });
     
     // Add logout button functionality
@@ -67,6 +69,13 @@ function checkAuthenticationAndRedirect() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const currentUser = getStoredUser();
     
+    // Clean up old localStorage data format if it exists
+    if (localStorage.getItem('userLoggedIn') || localStorage.getItem('userEmail')) {
+        localStorage.removeItem('userLoggedIn');
+        localStorage.removeItem('userEmail');
+        console.log('Cleaned up old authentication data');
+    }
+    
     // If accessing root directory or index without authentication, redirect to login
     if (!currentUser && (currentPage === '' || currentPage === 'index.html' || window.location.pathname === '/')) {
         console.log('Accessing root without authentication, redirecting to login page');
@@ -87,6 +96,8 @@ function checkAuthenticationAndRedirect() {
         window.location.href = 'home.html';
         return;
     }
+    
+    console.log('Authentication check passed for page:', currentPage);
 }
 
 // Initialize application
@@ -94,8 +105,18 @@ function initializeApp() {
     // Check if user is logged in
     const currentUser = getStoredUser();
     if (currentUser) {
-        // updateUIForLoggedInUser(currentUser); // Disabled - navbar now handled statically
         console.log('User is logged in:', currentUser.username);
+        
+        // Initialize profile navbar if available
+        if (typeof initializeProfileNavbar === 'function') {
+            initializeProfileNavbar();
+        }
+        
+        // Update profile button with username if available
+        const profileBtn = document.getElementById('profileBtn');
+        if (profileBtn && currentUser.username) {
+            profileBtn.textContent = currentUser.username;
+        }
     }
 }
 

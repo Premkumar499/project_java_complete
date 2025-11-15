@@ -198,19 +198,11 @@
                 return;
             }
             
-            // Check if user is logged in
-            const userLoggedIn = localStorage.getItem('userLoggedIn');
-            if (!userLoggedIn) {
-                alert('Please login first to book seats');
-                window.location.href = 'index.html';
-                return;
-            }
-            
-            // Get user details from localStorage
+            // Check if user is logged in using the current authentication system
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             if (!currentUser) {
-                alert('User session expired. Please login again.');
-                window.location.href = 'index.html';
+                alert('Please login first to book seats');
+                window.location.href = 'login.html';
                 return;
             }
             

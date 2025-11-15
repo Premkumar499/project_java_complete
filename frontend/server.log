@@ -1,0 +1,11 @@
+nohup: ignoring input
+127.0.0.1 - - [15/Nov/2025 15:17:13] "GET /home.html HTTP/1.1" 200 -
+127.0.0.1 - - [15/Nov/2025 15:17:13] "GET /css/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [15/Nov/2025 15:17:14] "GET /js/main.js HTTP/1.1" 200 -
+127.0.0.1 - - [15/Nov/2025 15:17:14] "GET /js/profile-modal.js HTTP/1.1" 200 -
+127.0.0.1 - - [15/Nov/2025 15:17:15] "GET /login.html HTTP/1.1" 200 -
+127.0.0.1 - - [15/Nov/2025 15:20:24] "GET /login.html HTTP/1.1" 304 -
+127.0.0.1 - - [15/Nov/2025 15:20:24] "GET /css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [15/Nov/2025 15:25:49] "GET /login.html HTTP/1.1" 304 -
+127.0.0.1 - - [15/Nov/2025 15:25:49] "GET /css/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [15/Nov/2025 15:25:49] "GET /js/main.js HTTP/1.1" 304 -

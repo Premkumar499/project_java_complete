@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 @SpringBootApplication
 @RestController
-@CrossOrigin(origins = "http://localhost:8082")
+@CrossOrigin(origins = {"http://localhost:8082", "http://localhost:8085", "*"})
 public class Application {
 
     public static void main(String[] args) {
@@ -150,6 +150,7 @@ public class Application {
     public Map<String, Object> bookSeats(@RequestBody Map<String, Object> bookingData) {
         Map<String, Object> response = new HashMap<>();
         try {
+            SeatDAO seatDAO = new SeatDAO();
             BookingDAO bookingDAO = new BookingDAO();
             
             int userId = (Integer) bookingData.get("userId");
@@ -159,15 +160,39 @@ public class Application {
             String seatNumbers = String.join(",", seatNumbersList); // Convert List to comma-separated String
             double totalAmount = ((Number) bookingData.get("totalAmount")).doubleValue();
             
-            boolean success = bookingDAO.createBooking(userId, showtimeId, seatNumbers, totalAmount);
+            // Check if any seats are already booked
+            Map<String, Object> currentSeatStatus = seatDAO.getSeatStatus(showtimeId);
+            @SuppressWarnings("unchecked")
+            List<String> occupiedSeats = (List<String>) currentSeatStatus.get("occupied");
             
-            if (success) {
-                response.put("status", "success");
-                response.put("message", "Booking confirmed!");
-                response.put("bookingId", "KSR" + System.currentTimeMillis());
+            for (String seat : seatNumbersList) {
+                if (occupiedSeats.contains(seat)) {
+                    response.put("status", "error");
+                    response.put("message", "Seat " + seat + " is already booked");
+                    return response;
+                }
+            }
+            
+            // First, try to book the seats
+            boolean seatsBooked = seatDAO.bookSeats(showtimeId, seatNumbersList);
+            
+            if (seatsBooked) {
+                // Create booking record
+                boolean bookingCreated = bookingDAO.createBooking(userId, showtimeId, seatNumbers, totalAmount);
+                
+                if (bookingCreated) {
+                    response.put("status", "success");
+                    response.put("message", "Booking confirmed!");
+                    response.put("bookingId", "KSR" + System.currentTimeMillis());
+                } else {
+                    // If booking creation failed, release the seats
+                    seatDAO.releaseSeats(showtimeId, seatNumbersList);
+                    response.put("status", "error");
+                    response.put("message", "Booking failed - could not create booking record");
+                }
             } else {
                 response.put("status", "error");
-                response.put("message", "Booking failed");
+                response.put("message", "Booking failed - seats are unavailable");
             }
         } catch (Exception e) {
             response.put("status", "error");

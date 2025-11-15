@@ -61,12 +61,7 @@
     <script src="js/main.js"></script>
     <script src="js/profile-modal.js"></script>
     <script>
-        // Check if user is logged in
-        if (!localStorage.getItem('userLoggedIn')) {
-            window.location.href = 'index.html';
-        }
-        
-        // Initialize profile and navigation
+        // Initialize profile and navigation - main.js already handles authentication
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize profile navbar functionality
             initializeProfileNavbar();
